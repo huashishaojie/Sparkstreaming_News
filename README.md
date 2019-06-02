@@ -72,7 +72,7 @@ a1.sources.r1.bind = node1
 a1.sources.r1.port = 5555 
 a1.sources.r1.threads = 5 
 
-#****************************flume + hbase****************************** 
+#****************************flume + hbase******************************  
 a1.channels.hbaseC.type = memory
 a1.channels.hbaseC.capacity = 10000
 a1.channels.hbaseC.transactionCapacity = 10000
@@ -85,7 +85,7 @@ a1.sinks.hbaseSink.serializer = org.apache.flume.sink.hbase.KfkAsyncHbaseEventSe
 a1.sinks.hbaseSink.channel = hbaseC
 a1.sinks.hbaseSink.serializer.payloadColumn = datetime,userid,searchname,retorder,cliorder,cliurl
 
-#****************************flume + kafka******************************
+#****************************flume + kafka******************************  
 a1.channels.kafkaC.type = memory
 a1.channels.kafkaC.capacity = 10000
 a1.channels.kafkaC.transactionCapacity = 10000
@@ -110,12 +110,10 @@ a1.sinks.kafkaSink.serializer.class = kafka.serializer.StringEncoder
 
 ### 6.编写启动jar包weblogs程序的shell在node2和node3(/opt/shell)
 touch weblog-shell.sh  
-------------------------------------------------------------------------------
-#/bin/bash
+#/bin/bash  
 
 echo "start log......"  
-java -jar /opt/jars/weblogs.jar /opt/data/weblog.log /opt/data/weblog-flume.log
--------------------------------------------------------------------------------
+java -jar /opt/jars/weblogs.jar /opt/data/weblog.log /opt/data/weblog-flume.log  
 
 ### 7.编写flume集群服务启动脚本(node1,node2,node3中flume目录下,下例在node2中,node3中a2改为a3)  
 #/bin/bash  
@@ -159,41 +157,41 @@ WITH SERDEPROPERTIES("hbase.columns.mapping"=
 TBLPROPERTIES("hbase.table.name"="weblogs");
 
 ### 12.Hive与Hbase集成 
-	1）第一种方式，比较麻烦，将hbase下配置文件拷贝到hive/conf下
-	2）第二种方式
-	a）在hive-site.xml中配置 
-	<property>
-	<name>hbase.zookeeper.quorum</name>
-	<value>node1,node2,node3</value>
-	</property>
-	b）将hbase的9个jar拷贝到hive/lib下(high-scale-lib-1.1.2.jar自己下载)
-	export HBASE_HOME=/opt/soft/hbase
-	export HIVE_LIB=/opt/soft/hive-1.2.1-bin
-	ln -s $HBASE_HOME/lib/hbase-server-1.1.3.jar $HIVE_LIB/lib/hbase-server-1.1.3.jar
+1）第一种方式，比较麻烦，将hbase下配置文件拷贝到hive/conf下  
+2）第二种方式  
+a）在hive-site.xml中配置  
+<property>  
+<name>hbase.zookeeper.quorum</name>  
+<value>node1,node2,node3</value>  
+</property>  
+b）将hbase的9个jar拷贝到hive/lib下(high-scale-lib-1.1.2.jar自己下载)  
+export HBASE_HOME=/opt/soft/hbase  
+export HIVE_LIB=/opt/soft/hive-1.2.1-bin  
+ln -s $HBASE_HOME/lib/hbase-server-1.1.3.jar $HIVE_LIB/lib/hbase-server-1.1.3.jar  
 
-	ln -s $HBASE_HOME/lib/hbase-client-1.1.3.jar $HIVE_LIB/lib/hbase-client-1.1.3.jar
+ln -s $HBASE_HOME/lib/hbase-client-1.1.3.jar $HIVE_LIB/lib/hbase-client-1.1.3.jar
 
-	ln -s $HBASE_HOME/lib/hbase-protocol-1.1.3.jar $HIVE_LIB/lib/hbase-protocol-1.1.3.jar 
+ln -s $HBASE_HOME/lib/hbase-protocol-1.1.3.jar $HIVE_LIB/lib/hbase-protocol-1.1.3.jar 
 
-	ln -s $HBASE_HOME/lib/hbase-it-1.1.3.jar $HIVE_LIB/lib/hbase-it-1.1.3.jar 
+ln -s $HBASE_HOME/lib/hbase-it-1.1.3.jar $HIVE_LIB/lib/hbase-it-1.1.3.jar 
 
-	ln -s $HBASE_HOME/lib/htrace-core-3.1.0-incubating.jar $HIVE_LIB/lib/htrace-core-3.1.0-incubating.jar
+ln -s $HBASE_HOME/lib/htrace-core-3.1.0-incubating.jar $HIVE_LIB/lib/htrace-core-3.1.0-incubating.jar
 
-	ln -s $HBASE_HOME/lib/hbase-hadoop2-compat-1.1.3.jar $HIVE_LIB/lib/hbase-hadoop2-compat-1.1.3.jar 
+ln -s $HBASE_HOME/lib/hbase-hadoop2-compat-1.1.3.jar $HIVE_LIB/lib/hbase-hadoop2-compat-1.1.3.jar 
 
-	ln -s $HBASE_HOME/lib/hbase-hadoop-compat-1.1.3.jar $HIVE_LIB/lib/hbase-hadoop-compat-1.1.3.jar 
+ln -s $HBASE_HOME/lib/hbase-hadoop-compat-1.1.3.jar $HIVE_LIB/lib/hbase-hadoop-compat-1.1.3.jar 
 
-	ln -s $HBASE_HOME/lib/high-scale-lib-1.1.2.jar $HIVE_LIB/lib/high-scale-lib-1.1.2.jar 
+ln -s $HBASE_HOME/lib/high-scale-lib-1.1.2.jar $HIVE_LIB/lib/high-scale-lib-1.1.2.jar 
 
-	ln -s $HBASE_HOME/lib/hbase-common-1.1.3.jar $HIVE_LIB/lib/hbase-common-1.1.3.jar
+ln -s $HBASE_HOME/lib/hbase-common-1.1.3.jar $HIVE_LIB/lib/hbase-common-1.1.3.jar
 
 ### 13.Hue安装部署 
-1）下载
-2）编译Hue
-	a）安装需要依赖的包(下面的包可能多了几个)
+1）下载  
+2）编译Hue  
+	a）安装需要依赖的包(下面的包可能多了几个)  
 	yum install ant asciidoc cyrus-sasl-devel cyrus-sasl-gssapi cyrus-sasl-plain gcc gcc-c++ krb5-devel libtidy libffi-devel libxml2-devel libxslt-devel make mysql mysql-devel openldap-devel python-devel sqlite-devel gmp-devel openssl-devel mysql-devel 
-	b）hue文件中：make apps
-3）配置(vi $HUE_HOME/desktop/conf/hue.ini)
+	b）hue文件中：make apps  
+3）配置(vi $HUE_HOME/desktop/conf/hue.ini)  
 	secret_key=jFE93j;2[290-eiw.KEiwN2s3['d;/.q[eIW^y#e=+Iei*@Mn < qW5o
 	http_host=node3
     http_port=8888
@@ -206,11 +204,11 @@ TBLPROPERTIES("hbase.table.name"="weblogs");
 	如下：adduser hue,并将desktop.db改为hue:hue下,不要在root下
 	chown -R hue:hue desktop.db
 6）Hue与Hive集成(hue.ini)
-	fs_defaultfs=hdfs://node1:8020		// hdfs默认路径
-	webhdfs_url=http://node1:50070/webhdfs/v1
-	hadoop_conf_dir=/opt/soft/hadoop-2.6.4/etc/hadoop 
-	hadoop_bin=/opt/soft/hadoop-2.6.4/bin
-    hadoop_hdfs_home=/opt/soft/hadoop-2.6.4
+	fs_defaultfs=hdfs://node1:8020		// hdfs默认路径    
+	webhdfs_url=http://node1:50070/webhdfs/v1  
+	hadoop_conf_dir=/opt/soft/hadoop-2.6.4/etc/hadoop  
+	hadoop_bin=/opt/soft/hadoop-2.6.4/bin  
+    hadoop_hdfs_home=/opt/soft/hadoop-2.6.4  
     ------------------------------------------------------------
     // 在三台hadoop中的core-site.xml中添加内容：
     <property>
@@ -227,89 +225,89 @@ TBLPROPERTIES("hbase.table.name"="weblogs");
 	------------------------------------------------------------
 	访问url：
 	http://node3:8888/filebrowser/
-7）Hue与Yarn集成(hue.ini)
-	resourcemanager_host=zxl2
-	resourcemanager_port=8032
-	resourcemanager_api_url=http://node1:8088
-	proxy_api_url=http://node1:8088
-	history_server_api_url=http://node1:19888
+7）Hue与Yarn集成(hue.ini)  
+	resourcemanager_host=zxl2  
+	resourcemanager_port=8032  
+	resourcemanager_api_url=http://node1:8088  
+	proxy_api_url=http://node1:8088  
+	history_server_api_url=http://node1:19888  
 	------------------------------------------------------------
-	启动yarn：
-	start-yarn.sh 
-8）Hue与Hive集成(Hue.ini)
-	hive_server_host=node3
-	hive_server_port=10000
-	hive_conf_dir=/opt/soft/hive-1.2.1-bin/conf
+	启动yarn：  
+	start-yarn.sh  
+8）Hue与Hive集成(Hue.ini)  
+	hive_server_host=node3    
+	hive_server_port=10000  
+	hive_conf_dir=/opt/soft/hive-1.2.1-bin/conf  
 	------------------------------------------------------------
-	启动hive 
-	[root@node3 bin]# ./hive --service hiveserver2
-9）Hue与Mysql集成(Hue.ini)
-	nice_name="My SQL DB"		// 随意配置
-	name=metastore				// 数据库名
-	engine=mysql 
-	host=node3 
-	port=3306
+	启动hive  
+	[root@node3 bin]# ./hive --service hiveserver2    
+9）Hue与Mysql集成(Hue.ini)  
+	nice_name="My SQL DB"		// 随意配置  
+	name=metastore				// 数据库名  
+	engine=mysql  
+	host=node3   
+	port=3306  
 	user=root 
-	password=1234
-	注意：[[[mysql]]]前的##要删掉
-10）Hue与Hbase集成(Hue.ini)
-	hbase_clusters=(Cluster|node1:9090)			// 随意配置集群中某一台hbase
-	hbase_conf_dir=/opt/soft/hbase/conf
+	password=1234  
+	注意：[[[mysql]]]前的##要删掉  
+10）Hue与Hbase集成(Hue.ini)  
+	hbase_clusters=(Cluster|node1:9090)			// 随意配置集群中某一台hbase  
+	hbase_conf_dir=/opt/soft/hbase/conf  
 	------------------------------------------------------------
-	启动hbase(thrift)
-	[root@node1 hbase]# bin/start-hbase.sh 
-	[root@node1 hbase]# bin/hbase-daemon.sh start thrift	// 启动一个就行
+	启动hbase(thrift)  
+	[root@node1 hbase]# bin/start-hbase.sh  
+	[root@node1 hbase]# bin/hbase-daemon.sh start thrift	// 启动一个就行  
 
 ### 14.配置Spark集群模式，因为受内存的影响，配置为standlone模式
 
 ### 15.配置Spark SQL与Hive集成(此次在安装Hive的服务器里的spark配置)
-1）将hive的配置文件hive-site.xml拷贝到spark conf目录，同时添加metastore的url配置
-	vi hive-site.xml
-	<property>
-		<name>hive.metastore.uris</name>
-		<value>thrift://node3:9083</value>
-	</property>
-2）拷贝hive中的mysql jar包到spark的jar目录下
-	cp hive-1.2.1-bin/lib/mysql-connector-java-5.1.35-bin.jar spark-2.2.0/jars/
-3）检查spark-env.sh 文件中的配置项
-	vi spark-env.sh
-	HADOOP_CONF_DIR=/opt/soft/hadoop-2.6.4/etc/hadoop
-4）启动mysql
-	service mysqld start 
-5）启动hive metastore服务
+1）将hive的配置文件hive-site.xml拷贝到spark conf目录，同时添加metastore的url配置  
+	vi hive-site.xml  
+	<property>  
+		<name>hive.metastore.uris</name>  
+		<value>thrift://node3:9083</value>  
+	</property>  
+2）拷贝hive中的mysql jar包到spark的jar目录下  
+	cp hive-1.2.1-bin/lib/mysql-connector-java-5.1.35-bin.jar spark-2.2.0/jars/  
+3）检查spark-env.sh 文件中的配置项  
+	vi spark-env.sh  
+	HADOOP_CONF_DIR=/opt/soft/hadoop-2.6.4/etc/hadoop  
+4）启动mysql  
+	service mysqld start  
+5）启动hive metastore服务  
 	bin/hive --service metastore
-6）启动hive并测试下
-	bin/hive
-	show databases;
-	create database zxl;
-	use zxl;
+6）启动hive并测试下  
+	bin/hive  
+	show databases;  
+	create database zxl;  
+	use zxl;  
 	create table if not exists test(userid string,username string)ROW FORMAT DELIMITED FIELDS TERMINATED BY ' ' STORED AS textfile;
-	load data local inpath "/opt/data/test.txt" into table test;
+	load data local inpath "/opt/data/test.txt" into table test;  
 
-	more /opt/data/test.txt
-	0001 spark
-	0002 hive
-	0003 hbase
-	0004 hadoop
-7）启动spark-shell
-	bin/spark-shell
-	spark.sql("select * from zxl.test").show
-8）展示启动spark-sql
-	bin/spark-sql
-	show databases;		#查看数据库
-	default
-	zxl
+	more /opt/data/test.txt  
+	0001 spark  
+	0002 hive  
+	0003 hbase  
+	0004 hadoop  
+7）启动spark-shell  
+	bin/spark-shell  
+	spark.sql("select * from zxl.test").show  
+8）展示启动spark-sql  
+	bin/spark-sql  
+	show databases;		#查看数据库  
+	default  
+	zxl  
 	use zxl;		#使用数据库
-	show tables;	#查看表
-	test
-	select * from test;		#查看表数据
-9）Spark SQL之ThriftServer和beeline使用
-	a）启动ThriftServer
-	sbin/start-thriftserver.sh
-	b）启动beeline
-	bin/beeline !connect jdbc:hive2://node3:10000
-	show databases;		#查看数据库
-	select * from kfk.test;		#查看表数据
+	show tables;	#查看表  
+	test  
+	select * from test;		#查看表数据  
+9）Spark SQL之ThriftServer和beeline使用    
+	a）启动ThriftServer  
+	sbin/start-thriftserver.sh  
+	b）启动beeline  
+	bin/beeline !connect jdbc:hive2://node3:10000  
+	show databases;		#查看数据库  
+	select * from kfk.test;		#查看表数据  
 
 ### 16.配置Spark SQL与MySQL集成(spark1为test数据库中的表)
 	启动spark-shell
