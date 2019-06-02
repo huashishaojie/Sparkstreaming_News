@@ -10,4 +10,4 @@
 4.统计哪个时段用户浏览量最高  
 
 ## 系统架构图设计
-images/architecture.png
+![image](https://github.com/huashishaojie/Sparkstreaming_News/blob/master/images/architecture.png)
