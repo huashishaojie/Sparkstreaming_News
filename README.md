@@ -196,35 +196,35 @@ ln -s $HBASE_HOME/lib/hbase-common-1.1.3.jar $HIVE_LIB/lib/hbase-common-1.1.3.ja
 	http_host=node3
     http_port=8888
     time_zone=Asia/Shanghai
-4）设置desktop.db的权限 
-	[root@node3 desktop]# chmod o+w desktop.db
-5）启动服务
-	[root@node3 hue-4.0.0]# ./build/env/bin/supervisor
-	如果出现错误KeyError: "Couldn't get user id for user hue"
-	如下：adduser hue,并将desktop.db改为hue:hue下,不要在root下
-	chown -R hue:hue desktop.db
-6）Hue与Hive集成(hue.ini)
+4）设置desktop.db的权限  
+	[root@node3 desktop]# chmod o+w desktop.db  
+5）启动服务  
+	[root@node3 hue-4.0.0]# ./build/env/bin/supervisor  
+	如果出现错误KeyError: "Couldn't get user id for user hue"  
+	如下：adduser hue,并将desktop.db改为hue:hue下,不要在root下  
+	chown -R hue:hue desktop.db  
+6）Hue与Hive集成(hue.ini)  
 	fs_defaultfs=hdfs://node1:8020		// hdfs默认路径    
 	webhdfs_url=http://node1:50070/webhdfs/v1  
 	hadoop_conf_dir=/opt/soft/hadoop-2.6.4/etc/hadoop  
 	hadoop_bin=/opt/soft/hadoop-2.6.4/bin  
     hadoop_hdfs_home=/opt/soft/hadoop-2.6.4  
     ------------------------------------------------------------
-    // 在三台hadoop中的core-site.xml中添加内容：
-    <property>
-  		<name>hadoop.proxyuser.hue.hosts</name>
-  		<value>*</value>
-	</property>
-	<property>
-		<name>hadoop.proxyuser.hue.groups</name>
-		<value>*</value>
-	</property>
+    // 在三台hadoop中的core-site.xml中添加内容：  
+    <property>  
+  		<name>hadoop.proxyuser.hue.hosts</name>  
+  		<value>*</value>  
+	</property>  
+	<property>  
+		<name>hadoop.proxyuser.hue.groups</name>  
+		<value>*</value>  
+	</property>  
 	------------------------------------------------------------
-	启动hdfs：
-	start-dfs.sh 
+	启动hdfs：  
+	start-dfs.sh  
 	------------------------------------------------------------
-	访问url：
-	http://node3:8888/filebrowser/
+	访问url：  
+	http://node3:8888/filebrowser/  
 7）Hue与Yarn集成(hue.ini)  
 	resourcemanager_host=zxl2  
 	resourcemanager_port=8032  
