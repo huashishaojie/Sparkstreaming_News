@@ -21,7 +21,7 @@ SparkWeb是本项目使用WebSocket和WebService搭建的前台展示页面，�
 	create 'weblogs','info'
 
 2.配置flume文件 
-node2中:
+node2中:  
 a2.sources = r1
 a2.sinks = k1
 a2.channels = c1
@@ -42,6 +42,7 @@ a2.sinks.k1.port = 5555
 #######################################################################
 
 node3中:
+
 a3.sources = r1
 a3.sinks = k1
 a3.channels = c1
@@ -61,7 +62,7 @@ a3.sinks.k1.hostname = node1
 a3.sinks.k1.port = 5555
 ########################################################################
 
-node1中:
+node1中:  
 a1.sources = r1
 a1.channels = kafkaC hbaseC
 a1.sinks = kafkaSink hbaseSink
@@ -362,7 +363,7 @@ val jdbcDF = spark.read
         conn.close()
      }
 
-21.StructuredStreaming与kafka、mysql集成
+21.StructuredStreaming与kafka、mysql集成  
 	添加spark一些jar，spark+kfk和spark+hbase
 
 22.创建表webCount用来接收数据 
