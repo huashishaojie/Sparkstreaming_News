@@ -17,7 +17,7 @@ SparkS是本项目使用SparkStreaming近实时消费kafka中数据，使用mysq
 SparkWeb是本项目使用WebSocket和WebService搭建的前台展示页面，效果如下：
 ![image](https://github.com/huashishaojie/Sparkstreaming_News/blob/master/images/SparkWeb.jpg)
 ## 四、参考步骤
-1.创建hbase表
+1.创建hbase表  
 	create 'weblogs','info'
 
 2.配置flume文件 
@@ -41,8 +41,7 @@ a2.sinks.k1.hostname = node1
 a2.sinks.k1.port = 5555
 #######################################################################
 
-node3中:
-
+node3中:  
 a3.sources = r1
 a3.sinks = k1
 a3.channels = c1
@@ -101,7 +100,7 @@ a1.sinks.kafkaSink.requiredAcks = 1
 a1.sinks.kafkaSink.batchSize = 1
 a1.sinks.kafkaSink.serializer.class = kafka.serializer.StringEncoder
 
-3.日志数据格式处理 
+3.日志数据格式处理   
 	cat weblog.log |tr "\t" "," > weblog2.log 	// 将制表符改为逗号
 	cat word.txt | sed 's/[ ][ ]*/,/g'          // 将多个空格换位逗号
 
@@ -114,21 +113,21 @@ touch weblog-shell.sh
 ------------------------------------------------------------------------------
 #/bin/bash
 
-echo "start log......"
+echo "start log......"  
 java -jar /opt/jars/weblogs.jar /opt/data/weblog.log /opt/data/weblog-flume.log
 -------------------------------------------------------------------------------
 
-7.编写flume集群服务启动脚本(node1,node2,node3中flume目录下,下例在node2中,node3中a2改为a3)
-#/bin/bash
-echo "flume-2 start"
-bin/flume-ng agent --conf conf -f conf/flume-conf.properties -n a2 -Dflume.root.logger=INFO.console
+7.编写flume集群服务启动脚本(node1,node2,node3中flume目录下,下例在node2中,node3中a2改为a3)  
+#/bin/bash  
+echo "flume-2 start"  
+bin/flume-ng agent --conf conf -f conf/flume-conf.properties -n a2 -Dflume.root.logger=INFO.console  
 
-8.编写测试kafka消费的shell 
-vi kfk-test-consumer.sh 
+8.编写测试kafka消费的shell  
+vi kfk-test-consumer.sh  
 
-#/bin/bash
-echo "kfk-kafka-consumer.sh start......"
-bin/kafka-console-consumer.sh --zookeeper node1:2181,node2:2181,node3:2181 --from-beginning --topic weblogs
+#/bin/bash  
+echo "kfk-kafka-consumer.sh start......"  
+bin/kafka-console-consumer.sh --zookeeper node1:2181,node2:2181,node3:2181 --from-beginning --topic weblogs  
 
 9.进行测试flume采集数据的全流程 
 	1）启动hdfs、zookeeper、kafka、flume
