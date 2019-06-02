@@ -17,10 +17,10 @@ SparkS是本项目使用SparkStreaming近实时消费kafka中数据，使用mysq
 SparkWeb是本项目使用WebSocket和WebService搭建的前台展示页面，效果如下：
 ![image](https://github.com/huashishaojie/Sparkstreaming_News/blob/master/images/SparkWeb.jpg)
 ## 四、参考步骤
-1.创建hbase表  
+### 1.创建hbase表  
 	create 'weblogs','info'
 
-2.配置flume文件 
+### 2.配置flume文件  
 node2中:  
 a2.sources = r1
 a2.sinks = k1
@@ -100,15 +100,15 @@ a1.sinks.kafkaSink.requiredAcks = 1
 a1.sinks.kafkaSink.batchSize = 1
 a1.sinks.kafkaSink.serializer.class = kafka.serializer.StringEncoder
 
-3.日志数据格式处理   
+### 3.日志数据格式处理   
 	cat weblog.log |tr "\t" "," > weblog2.log 	// 将制表符改为逗号
 	cat word.txt | sed 's/[ ][ ]*/,/g'          // 将多个空格换位逗号
 
-4.自定义flume的hbase sink并打成jar包上传到flume/lib下
+### 4.自定义flume的hbase sink并打成jar包上传到flume/lib下
 
-5.创建weblogs项目来采集数据,并打成jar包发布到服务器node2和node3(/opt/jars)
+### 5.创建weblogs项目来采集数据,并打成jar包发布到服务器node2和node3(/opt/jars)
 
-6.编写启动jar包weblogs程序的shell在node2和node3(/opt/shell)
+### 6.编写启动jar包weblogs程序的shell在node2和node3(/opt/shell)
 touch weblog-shell.sh  
 ------------------------------------------------------------------------------
 #/bin/bash
@@ -117,19 +117,19 @@ echo "start log......"
 java -jar /opt/jars/weblogs.jar /opt/data/weblog.log /opt/data/weblog-flume.log
 -------------------------------------------------------------------------------
 
-7.编写flume集群服务启动脚本(node1,node2,node3中flume目录下,下例在node2中,node3中a2改为a3)  
+### 7.编写flume集群服务启动脚本(node1,node2,node3中flume目录下,下例在node2中,node3中a2改为a3)  
 #/bin/bash  
 echo "flume-2 start"  
 bin/flume-ng agent --conf conf -f conf/flume-conf.properties -n a2 -Dflume.root.logger=INFO.console  
 
-8.编写测试kafka消费的shell  
+### 8.编写测试kafka消费的shell  
 vi kfk-test-consumer.sh  
 
 #/bin/bash  
 echo "kfk-kafka-consumer.sh start......"  
 bin/kafka-console-consumer.sh --zookeeper node1:2181,node2:2181,node3:2181 --from-beginning --topic weblogs  
 
-9.进行测试flume采集数据的全流程 
+### 9.进行测试flume采集数据的全流程 
 	1）启动hdfs、zookeeper、kafka、flume
 	2）启动weblog-shell.sh脚本 
 	3）创建名为weblogs的topic
@@ -137,9 +137,9 @@ bin/kafka-console-consumer.sh --zookeeper node1:2181,node2:2181,node3:2181 --fro
 	4）启动node2、node3的脚本发送数据到node1
 	5）启动node1的脚本接收node2、node3的数据,发送到hbase和kafka
 
-10.安装mysql 
+### 10.安装mysql 
 
-11.安装hive(启动hive前需先启动yarn,因为mapreduce需在yarn上运行)
+### 11.安装hive(启动hive前需先启动yarn,因为mapreduce需在yarn上运行)
 	1）启动：bin/hive
 	2）测试加载数据到hive：
 	load data local inpath '/opt/data/test.txt' into table test;
@@ -158,7 +158,7 @@ WITH SERDEPROPERTIES("hbase.columns.mapping"=
 ":key,info:datetime,info:userid,info:searchname,info:retorder,info:cliorder,info:cliurl")
 TBLPROPERTIES("hbase.table.name"="weblogs");
 
-12.Hive与Hbase集成 
+### 12.Hive与Hbase集成 
 	1）第一种方式，比较麻烦，将hbase下配置文件拷贝到hive/conf下
 	2）第二种方式
 	a）在hive-site.xml中配置 
@@ -187,7 +187,7 @@ TBLPROPERTIES("hbase.table.name"="weblogs");
 
 	ln -s $HBASE_HOME/lib/hbase-common-1.1.3.jar $HIVE_LIB/lib/hbase-common-1.1.3.jar
 
-13.Hue安装部署 
+### 13.Hue安装部署 
 1）下载
 2）编译Hue
 	a）安装需要依赖的包(下面的包可能多了几个)
@@ -260,9 +260,9 @@ TBLPROPERTIES("hbase.table.name"="weblogs");
 	[root@node1 hbase]# bin/start-hbase.sh 
 	[root@node1 hbase]# bin/hbase-daemon.sh start thrift	// 启动一个就行
 
-14.配置Spark集群模式，因为受内存的影响，配置为standlone模式
+### 14.配置Spark集群模式，因为受内存的影响，配置为standlone模式
 
-15.配置Spark SQL与Hive集成(此次在安装Hive的服务器里的spark配置)
+### 15.配置Spark SQL与Hive集成(此次在安装Hive的服务器里的spark配置)
 1）将hive的配置文件hive-site.xml拷贝到spark conf目录，同时添加metastore的url配置
 	vi hive-site.xml
 	<property>
@@ -311,7 +311,7 @@ TBLPROPERTIES("hbase.table.name"="weblogs");
 	show databases;		#查看数据库
 	select * from kfk.test;		#查看表数据
 
-16.配置Spark SQL与MySQL集成(spark1为test数据库中的表)
+### 16.配置Spark SQL与MySQL集成(spark1为test数据库中的表)
 	启动spark-shell
 	bin/spark-shell
 	:paste		#可以多行输入,包括注释,需顶格书写
@@ -326,7 +326,7 @@ val jdbcDF = spark.read
 	#打印读取数据
 	jdbcDF.show
 
-17.配置Spark SQL与Hbase集成
+### 17.配置Spark SQL与Hbase集成
 	Spark SQL与HBase集成，其核心就是Spark Sql通过hive外部表来获取HBase的表数据。
 	1）拷贝HBase的包和hive包到spark 的jars目录下
 		hbase-client-1.1.3.jar 
@@ -340,15 +340,15 @@ val jdbcDF = spark.read
 	bin/spark-shell
 	val df =spark.sql("select count(1) from weblogs").show
 
-18.安装nc作为外部数据源
+### 18.安装nc作为外部数据源
 	yum -y install nc 或者 rpm安装(rpm -ivh nc-1.84-24.el6.x86_64.rpm)
 
-19.简单运行nc与spark例子
+### 19.简单运行nc与spark例子
 	[root@node2 ~]# nc -lk 9999
 	[root@node2 spark-2.2.0]# bin/run-example --master local[2] streaming.NetworkWordCount localhost 9999
 	注：记得设置master时，local[n]，n的值一定要大于worker的个数
 
-20.Spark Streaming结果数据保存到外部数据库(mysql)
+### 20.Spark Streaming结果数据保存到外部数据库(mysql)
 	// 一般与数据库建立连接时，使用foreachPartition来避免频繁创建数据库连接
 	 Class.forName("com.mysql.jdbc.Driver")
      val conn = DriverManager
@@ -362,16 +362,16 @@ val jdbcDF = spark.read
         conn.close()
      }
 
-21.StructuredStreaming与kafka、mysql集成  
+### 21.StructuredStreaming与kafka、mysql集成  
 	添加spark一些jar，spark+kfk和spark+hbase
 
-22.创建表webCount用来接收数据 
+### 22.创建表webCount用来接收数据 
 CREATE TABLE `webCount` (
   `titleName` varchar(255) DEFAULT NULL,
   `count` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-23.简单流程测试：
+### 23.简单流程测试：
 	1）启动zookeeper：zkServer.sh start 
 	2）启动dfs：start-dfs.sh 
 	3）启动hbase：start-hbase.sh 
